@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""
-Copyright (c) 2018 hualala Security (https://www.beysec.com)
-author : bey0nd
-"""
+
 import requests
 from xml.dom import minidom
 from urllib.parse import urlparse

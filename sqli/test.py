@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""
-Copyright (c) 2018 hualala Security (https://www.beysec.com)
-author : bey0nd
-"""
+import sys
 import requests
 from xml.dom import minidom
 from urllib.parse import urlparse
@@ -13,6 +10,7 @@ import time
 import re
 import os
 import random
+import json
 from sqlconf.config import BOUNDED_INJECTION_MARKER
 from sqlconf.config import DEFAULT_RADIO
 from sqlihelper import getPagesRatio, getFlagString
@@ -35,7 +33,7 @@ class SqliCheck(object):
         self.headers = headers
         self.isSQLI = False
         self.scanlevel = scanlevel
-        # self.postdatas = {}  # post数据转换成字典格式
+        self.post_pattern = 'normal'  # json  upload     post格式
         self.sqliPayload = ''  # 注入使用的payload
         self.sqliParam = ''  # 存在注入参数
         self.randomint1 = str(random.randint(10, 30))
@@ -47,8 +45,13 @@ class SqliCheck(object):
         self.params = self.params.split('&')
     
 
-    def post_params(self):
-        pass
+    def post_params(self):   #  post 参数解析器
+        try:
+            json.loads(self.postdata)
+            self.post_pattern = 'json'
+        except ValueError:
+            self.params = self.postdata.split('&')
+            print(self.params)
 
     def sqlibool(self):
         root = minidom.parse(sqliboolfile).documentElement
@@ -129,7 +132,20 @@ class SqliCheck(object):
                 payloads = node.getElementsByTagName(
                     'requests')[0].childNodes[0].nodeValue.strip()
                 for payitem in payloads.splitlines():
-
+                    if self.method == "POST":
+                        for parm in self.params:
+                            if self.post_pattern == 'normal':
+                                sql_data = self.postdata.replace(parm,parm+payitem.strip())
+                                print(self.url)
+                                html = requests.post(url=self.url,data=sql_data, headers=self.headers).text
+                                # print(html)
+                                sys.out(0)
+                                for response_rule in node.getElementsByTagName('responses')[0].childNodes[0].nodeValue.strip().splitlines():
+                                    if re.search(response_rule.strip(), html):
+                                        self.isSQLI = True
+                                        self.sqliPayload = "%s" % (payitem)
+                                        self.sqliParam = parm
+                                        return self.isSQLI
                     if self.method == "GET":
                         for parm in self.params:
                             sql_test = self.url.replace(parm,parm+payitem.strip())
@@ -151,22 +167,20 @@ class SqliCheck(object):
             self.get_url_params()
         elif self.method == 'POST':
             self.post_params()
-        issqli =  self.sqlierror() or self.sqlibool() or self.sqlitime()#self.sqlibool()#self.sqlierror() or self.sqlitime()#or self.sqlibool() or self.sqlitime()
+        issqli =  self.sqlierror()# or self.sqlibool() or self.sqlitime()#self.sqlibool()#self.sqlierror() or self.sqlitime()#or self.sqlibool() or self.sqlitime()
         print(issqli)
         return self
 
 
 def main():
-    url1 = "10.246.190.63/DVWA-master/vulnerabilities/sqli/?id=1&Submit=Submit#"
-    postdata = {
-        "uid": "1"
-    }
+    url1 = "http://10.246.190.63/DVWA-master/vulnerabilities/sqli/"
+    postdata = "id=1&Submit=Submit"
 
     headers = {
-        "cookie": "security=low; PHPSESSID=moreos061jjhfrnirbdblbat83"
+        "cookie": "security=medium; PHPSESSID=moreos061jjhfrnirbdblbat83"
     }
 
-    sqli = SqliCheck(url1, method="GET", postdata=postdata, headers=headers, skip=[
+    sqli = SqliCheck(url1, method="POST", postdata=postdata, headers=headers, skip=[
                      'allecIDs', 'beginDate', '_t', 'billBeginDate', 'billEndDate', 'note', 'level', 'goodsIDs', 'pageNo', 'pageSize'], scanlevel=3).run()
     if sqli.isSQLI:
         print('[+] URL : ', sqli.url)
