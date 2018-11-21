@@ -22,7 +22,10 @@ sqliboolfile = os.path.join("sqlconf", 'sqlibool.xml')
 sqlierrorfile = os.path.join("sqlconf", 'sqlierror.xml')
 sqlitimefile = os.path.join("sqlconf", 'sqlitime.xml')
 
+'''
+post json格式  upload格式未做判断
 
+'''
 
 class SqliCheck(object):
     def __init__(self, url, method="", postdata={}, headers=[], skip=[], scanlevel=1, callbacks=''):
@@ -63,6 +66,36 @@ class SqliCheck(object):
                         "compare1")[0].childNodes[0].nodeValue
                     compare2 = compare.getElementsByTagName(
                         "compare2")[0].childNodes[0].nodeValue
+                    if self.method == "POST":
+                        for parm in self.params:
+                            if self.post_pattern == "normal":
+                                sql_data1 = self.postdata.replace(parm,parm+compare1).replace(
+                                RANDOM_INT_STR2, self.randomint2).replace(RANDOM_INT_STR1, self.randomint1)
+                                sql_data2 = self.postdata.replace(parm,parm+compare2).replace(
+                                RANDOM_INT_STR2, self.randomint2).replace(RANDOM_INT_STR1, self.randomint1)
+                                html1 = requests.post(url=self.url,data=sql_data1,headers=self.headers).text
+                                html2 = requests.post(url=self.url,data=sql_data2,headers=self.headers).text
+                                flagString = getFlagString(html1, html2)
+                                print(sql_data1)
+                                print(sql_data2)
+                                if flagString:
+                                    sql_data3 = self.postdata.replace(parm,parm+compare1).replace(RANDOM_INT_STR2, str(
+                                    random.randint(81, 99))).replace(RANDOM_INT_STR1, str(random.randint(61, 80)))
+                                    sql_data4 = self.postdata.replace(parm,parm+compare2).replace(RANDOM_INT_STR2, str(
+                                    random.randint(81, 99))).replace(RANDOM_INT_STR1, str(random.randint(61, 80)))
+                                    html3 = requests.post(url=self.url,data=sql_data3,headers=self.headers).text
+                                    html4 = requests.post(url=self.url,data=sql_data4,headers=self.headers).text
+                                    if (flagString in html3 and flagString not in html4) or (flagString not in html3 and flagString in html4):
+                                        self.isSQLI = True
+                                        self.sqliPayload = sql_data3
+                                        self.sqliParam = parm
+                                        return self.isSQLI
+                                if getPagesRatio(html1, html2) < DEFAULT_RADIO:
+                                    self.isSQLI = True
+                                    self.sqliPayload = "%s" % (sql_test1)
+                                    self.sqliParam = parm
+                                    return self.isSQLI
+
                     if self.method == "GET":
                         for parm in self.params:
                             sql_test1 = self.url.replace(parm,parm+compare1).replace(
@@ -108,6 +141,19 @@ class SqliCheck(object):
                 payloads = node.getElementsByTagName(
                     'requests')[0].childNodes[0].nodeValue.strip()
                 for payitem in payloads.splitlines():
+                    if self.method == "POST":
+                        for parm in self.params:
+                            if self.post_pattern == 'normal':
+                                sql_data = self.postdata.replace(parm,parm+payitem.strip())
+                                time_start = time.time()
+                                html = requests.post(url=self.url,data=sql_data, headers=self.headers).text
+                                time_end = time.time()
+                                cost_time = time_end - time_start
+                                if cost_time >= 5:
+                                    self.isSQLI = True
+                                    self.sqliPayload = "%s" % (payitem)
+                                    self.sqliParam = parm
+                                    return self.isSQLI
                     if self.method == "GET":
                         for parm in self.params:
                             sql_test = self.url.replace(parm,parm+payitem.strip())
@@ -136,10 +182,8 @@ class SqliCheck(object):
                         for parm in self.params:
                             if self.post_pattern == 'normal':
                                 sql_data = self.postdata.replace(parm,parm+payitem.strip())
-                                print(self.url)
                                 html = requests.post(url=self.url,data=sql_data, headers=self.headers).text
                                 # print(html)
-                                sys.out(0)
                                 for response_rule in node.getElementsByTagName('responses')[0].childNodes[0].nodeValue.strip().splitlines():
                                     if re.search(response_rule.strip(), html):
                                         self.isSQLI = True
@@ -167,7 +211,7 @@ class SqliCheck(object):
             self.get_url_params()
         elif self.method == 'POST':
             self.post_params()
-        issqli =  self.sqlierror()# or self.sqlibool() or self.sqlitime()#self.sqlibool()#self.sqlierror() or self.sqlitime()#or self.sqlibool() or self.sqlitime()
+        issqli =  self.sqlibool()# or self.sqlibool() or self.sqlitime()#self.sqlibool()#self.sqlierror() or self.sqlitime()#or self.sqlibool() or self.sqlitime()
         print(issqli)
         return self
 
@@ -177,7 +221,8 @@ def main():
     postdata = "id=1&Submit=Submit"
 
     headers = {
-        "cookie": "security=medium; PHPSESSID=moreos061jjhfrnirbdblbat83"
+        "cookie": "security=medium; PHPSESSID=moreos061jjhfrnirbdblbat83",
+        'Content-Type':'application/x-www-form-urlencoded'
     }
 
     sqli = SqliCheck(url1, method="POST", postdata=postdata, headers=headers, skip=[
