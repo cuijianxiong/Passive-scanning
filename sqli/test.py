@@ -149,6 +149,8 @@ class SqliCheck(object):
     def run(self):
         if self.method == 'GET':
             self.get_url_params()
+        elif self.method == 'POST':
+            self.post_params()
         issqli =  self.sqlierror() or self.sqlibool() or self.sqlitime()#self.sqlibool()#self.sqlierror() or self.sqlitime()#or self.sqlibool() or self.sqlitime()
         print(issqli)
         return self
