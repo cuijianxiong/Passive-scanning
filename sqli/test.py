@@ -44,7 +44,6 @@ class SqliCheck(object):
     
     def get_url_params(self):   #  get 参数解析器
         self.get_url,self.params = self.url.split('?')
-        print(self.get_url)
         self.params = self.params.split('&')
     
 
@@ -54,7 +53,6 @@ class SqliCheck(object):
             self.post_pattern = 'json'
         except ValueError:
             self.params = self.postdata.split('&')
-            print(self.params)
 
     def sqlibool(self):
         root = minidom.parse(sqliboolfile).documentElement
@@ -76,8 +74,6 @@ class SqliCheck(object):
                                 html1 = requests.post(url=self.url,data=sql_data1,headers=self.headers).text
                                 html2 = requests.post(url=self.url,data=sql_data2,headers=self.headers).text
                                 flagString = getFlagString(html1, html2)
-                                print(sql_data1)
-                                print(sql_data2)
                                 if flagString:
                                     sql_data3 = self.postdata.replace(parm,parm+compare1).replace(RANDOM_INT_STR2, str(
                                     random.randint(81, 99))).replace(RANDOM_INT_STR1, str(random.randint(61, 80)))
@@ -211,13 +207,13 @@ class SqliCheck(object):
             self.get_url_params()
         elif self.method == 'POST':
             self.post_params()
-        issqli =  self.sqlibool()# or self.sqlibool() or self.sqlitime()#self.sqlibool()#self.sqlierror() or self.sqlitime()#or self.sqlibool() or self.sqlitime()
-        print(issqli)
+        issqli =  self.sqlierror() or self.sqlibool() or self.sqlitime()#self.sqlibool()#self.sqlierror() or self.sqlitime()#or self.sqlibool() or self.sqlitime()
+        # print(issqli)
         return self
 
 
 def main():
-    url1 = "http://10.246.190.63/DVWA-master/vulnerabilities/sqli/"
+    url1 = "http://10.246.190.63/DVWA-master/vulnerabilities/sqli/session-input.php"
     postdata = "id=1&Submit=Submit"
 
     headers = {
